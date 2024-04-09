@@ -191,9 +191,9 @@ const VideoCall = () => {
     const [remotePeerIdValue, setRemotePeerIdValue] = useState('');
     const remoteVideoRef = useRef(null);
     const currentUserVideoRef = useRef(null);
-    const screenShareVideoRef = useRef(null);
     const peerInstance = useRef(null);
     const mediaStreamRef = useRef(null);
+    const screenShareVideoRef = useRef(null);
     const screenShareStreamRef = useRef(null);
 
     // Function to generate a shorter ID
@@ -227,23 +227,14 @@ const VideoCall = () => {
     };
 
     // Function to initiate video call
-    const call = (remotePeerId) => {
+    const call = (remotePeerId, mediaStream) => {
         if (!peerInstance.current) return;
 
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-            .then(mediaStream => {
-                mediaStreamRef.current = mediaStream;
-                currentUserVideoRef.current.srcObject = mediaStream;
-                currentUserVideoRef.current.play();
-                const call = peerInstance.current.call(remotePeerId, mediaStream);
-                call.on('stream', (remoteStream) => {
-                    remoteVideoRef.current.srcObject = remoteStream;
-                    remoteVideoRef.current.play();
-                });
-            })
-            .catch(error => {
-                console.error('getUserMedia error:', error);
-            });
+        const call = peerInstance.current.call(remotePeerId, mediaStream);
+        call.on('stream', (remoteStream) => {
+            remoteVideoRef.current.srcObject = remoteStream;
+            remoteVideoRef.current.play();
+        });
     };
 
     useEffect(() => {
@@ -285,25 +276,30 @@ const VideoCall = () => {
     return (
         <div className="App">
             <h1>Current user id is {peerId}</h1>
-            <input type="text" value={remotePeerIdValue} onChange={e => setRemotePeerIdValue(e.target.value)} />
-            <button onClick={() => call(remotePeerIdValue)}>Call</button>
-            <button onClick={startScreenSharing}>Start Screen Share</button>
-            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div>
-                    <h2>Webcam</h2>
-                    <video ref={currentUserVideoRef} style={{ width: '300px', height: 'auto' }} />
+                    <h2>Remote Video</h2>
+                    <video ref={remoteVideoRef} style={{ width: '100%', height: 'auto' }} />
                 </div>
                 <div>
                     <h2>Screen Share</h2>
-                    <video ref={screenShareVideoRef} style={{ width: '300px', height: 'auto' }} />
+                    <video ref={screenShareVideoRef} style={{ width: '100%', height: 'auto' }} />
+                    <button onClick={startScreenSharing}>Start Screen Share</button>
                 </div>
             </div>
-            <div>
-                <h2>Remote Video</h2>
-                <video ref={remoteVideoRef} style={{ width: '100%', height: 'auto' }} />
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                    <h2>User Webcam</h2>
+                    <video ref={currentUserVideoRef} style={{ width: '50%', height: 'auto' }} />
+                </div>
+                <div>
+                    <h2>Peer Webcam</h2>
+                    <video ref={remoteVideoRef} style={{ width: '50%', height: 'auto' }} />
+                </div>
             </div>
         </div>
     );
 };
 
 export default VideoCall;
+
