@@ -128,14 +128,35 @@ const VideoCall = () => {
         };
     }, []);
 
+    // const call = (remotePeerId) => {
+    //     if (!peerInstance.current) return;
+
+    //     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    //         .then(mediaStream => {
+    //             mediaStreamRef.current = mediaStream;
+    //             currentUserVideoRef.current.srcObject = mediaStream;
+    //             currentUserVideoRef.current.play();
+    //             const call = peerInstance.current.call(remotePeerId, mediaStream);
+    //             call.on('stream', (remoteStream) => {
+    //                 remoteVideoRef.current.srcObject = remoteStream;
+    //                 remoteVideoRef.current.play();
+    //             });
+    //         })
+    //         .catch(error => {
+    //             console.error('getUserMedia error:', error);
+    //         });
+    // };
     const call = (remotePeerId) => {
         if (!peerInstance.current) return;
-
+    
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             .then(mediaStream => {
                 mediaStreamRef.current = mediaStream;
                 currentUserVideoRef.current.srcObject = mediaStream;
-                currentUserVideoRef.current.play();
+                // Check if the video is already playing before calling play()
+                if (currentUserVideoRef.current.paused) {
+                    currentUserVideoRef.current.play();
+                }
                 const call = peerInstance.current.call(remotePeerId, mediaStream);
                 call.on('stream', (remoteStream) => {
                     remoteVideoRef.current.srcObject = remoteStream;
@@ -146,6 +167,7 @@ const VideoCall = () => {
                 console.error('getUserMedia error:', error);
             });
     };
+    
 
     // Function to generate a shorter ID
     const generateShortId = () => {
