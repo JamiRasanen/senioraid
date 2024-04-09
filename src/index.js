@@ -4,11 +4,12 @@ import './index.css';
 import App from './App';
 import VideoCall from './videoCall';
 import reportWebVitals from './reportWebVitals';
+import DrawingApp from './drawing';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <VideoCall />
+    <DrawingApp/>
   </React.StrictMode>
 );
 
