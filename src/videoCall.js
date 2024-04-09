@@ -301,7 +301,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Peer from 'peerjs';
 
 const VideoCall = () => {
-    const [peerId, setPeerId] = useState('12345');
+    const [peerId, setPeerId] = useState('');
     const [remotePeerIdValue, setRemotePeerIdValue] = useState('');
     const remoteVideoRef = useRef(null);
     const currentUserVideoRef = useRef(null);
@@ -311,15 +311,15 @@ const VideoCall = () => {
     const screenShareStreamRef = useRef(null);
 
     // Function to generate a shorter ID
-    // const generateShortId = () => {
-    //     // This is just a sample implementation. You can use any method to generate a shorter ID.
-    //     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    //     let id = '';
-    //     for (let i = 0; i < 10; i++) {
-    //         id += chars.charAt(Math.floor(Math.random() * chars.length));
-    //     }
-    //     return id;
-    // };
+    const generateShortId = () => {
+        // This is just a sample implementation. You can use any method to generate a shorter ID.
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let id = '12345';
+        // for (let i = 0; i < 10; i++) {
+        //     id += chars.charAt(Math.floor(Math.random() * chars.length));
+        // }
+        return id;
+    };
 
     // Function to initiate screen sharing
     const startScreenSharing = async () => {
