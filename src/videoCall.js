@@ -585,9 +585,9 @@ const VideoCall = () => {
     // Function to generate a shorter ID
     const generateShortId = () => {
         // This is just a sample implementation. You can use any method to generate a shorter ID.
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const chars = '0123456789';
         let id = '';
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 5; i++) {
             id += chars.charAt(Math.floor(Math.random() * chars.length));
         }
         return id;
@@ -632,6 +632,23 @@ const VideoCall = () => {
             });
     };
 
+    // Function to end the call
+    const endCall = () => {
+        if (peerInstance.current) {
+            peerInstance.current.destroy();
+            peerInstance.current = null;
+        }
+        if (mediaStreamRef.current) {
+            mediaStreamRef.current.getTracks().forEach(track => track.stop());
+        }
+        if (screenShareStreamRef.current) {
+            screenShareStreamRef.current.getTracks().forEach(track => track.stop());
+        }
+        remoteVideoRef.current.srcObject = null;
+        currentUserVideoRef.current.srcObject = null;
+        screenShareVideoRef.current.srcObject = null;
+    };
+
     useEffect(() => {
         const peer = new Peer(generateShortId()); // Use custom shorter ID
 
@@ -660,11 +677,7 @@ const VideoCall = () => {
 
         return () => {
             // Clean up resources when unmounting
-            if (mediaStreamRef.current) {
-                mediaStreamRef.current.getTracks().forEach(track => track.stop());
-            }
-            peer.disconnect();
-            peer.destroy();
+            endCall();
         };
     }, []);
 
@@ -731,6 +744,7 @@ const VideoCall = () => {
                 <button onClick={startScreenSharing}>Start Screen Share</button>
                 <input type="text" value={remotePeerIdValue} onChange={e => setRemotePeerIdValue(e.target.value)} />
                 <button onClick={callPeer}>Call</button>
+                <button onClick={endCall}>End Call</button>
             </div>
             <div>
                 <h2>Screen Share</h2>
@@ -748,6 +762,7 @@ const VideoCall = () => {
 };
 
 export default VideoCall;
+
 
 
 
