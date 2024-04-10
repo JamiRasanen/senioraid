@@ -9,7 +9,8 @@ import { DrawingApp } from './drawing/drawing';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <DrawingApp/>
+    <DrawingApp />
+    <VideoCall/>
   </React.StrictMode>
 );
 
