@@ -50,19 +50,26 @@ function DrawingApp() {
     };
 
     useEffect(() => {
-        if (drawnCanvasRef && drawnData.length > 0) {
+        if (drawnCanvasRef) {
             const drawnCanvasCtx = drawnCanvasRef.getContext('2d');
-            drawnData.forEach(({ x, y, color, thickness }, index) => {
-                if (index === 0) {
-                    drawnCanvasCtx.beginPath();
-                    drawnCanvasCtx.moveTo(x, y);
-                } else {
-                    drawnCanvasCtx.lineTo(x, y);
-                }
-                drawnCanvasCtx.strokeStyle = color;
-                drawnCanvasCtx.lineWidth = thickness;
-                drawnCanvasCtx.stroke();
-            });
+            if (drawnData.length > 0) {
+                drawnData.forEach(({ x, y, color, thickness }, index) => {
+                    if (index === 0) {
+                        drawnCanvasCtx.beginPath();
+                        drawnCanvasCtx.moveTo(x, y);
+                    } else {
+                        drawnCanvasCtx.lineTo(x, y);
+                    }
+                    drawnCanvasCtx.strokeStyle = color;
+                    drawnCanvasCtx.lineWidth = thickness;
+                    drawnCanvasCtx.stroke();
+                });
+            }
+            else {
+                console.log("clear kutsuttu");
+                drawnCanvasCtx.clearRect(0, 0, drawnCanvasRef.width, drawnCanvasRef.height);
+            }
+            
         }
     }, [drawnData, drawnCanvasRef]);
 
