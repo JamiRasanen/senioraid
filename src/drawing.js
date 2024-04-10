@@ -5,6 +5,8 @@ function DrawingApp() {
     const canvasRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [ctx, setCtx] = useState(null);
+    const [drawnData, setDrawnData] = useState([]);
+    const [drawnCanvasRef, setDrawnCanvasRef] = useState(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -19,6 +21,7 @@ function DrawingApp() {
         const { offsetX, offsetY } = event.nativeEvent;
         ctx.beginPath();
         ctx.moveTo(offsetX, offsetY);
+        setDrawnData([...drawnData, { x: offsetX, y: offsetY, color: ctx.strokeStyle, thickness: ctx.lineWidth }]);
     };
 
     const draw = (event) => {
@@ -26,6 +29,7 @@ function DrawingApp() {
         const { offsetX, offsetY } = event.nativeEvent;
         ctx.lineTo(offsetX, offsetY);
         ctx.stroke();
+        setDrawnData([...drawnData, { x: offsetX, y: offsetY, color: ctx.strokeStyle, thickness: ctx.lineWidth }]);
     };
 
     const endDrawing = () => {
@@ -34,6 +38,7 @@ function DrawingApp() {
 
     const clearCanvas = () => {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        setDrawnData([]);
     };
 
     const changeColor = (color) => {
@@ -43,6 +48,23 @@ function DrawingApp() {
     const changeLineWidth = (width) => {
         ctx.lineWidth = width;
     };
+
+    useEffect(() => {
+        if (drawnCanvasRef && drawnData.length > 0) {
+            const drawnCanvasCtx = drawnCanvasRef.getContext('2d');
+            drawnData.forEach(({ x, y, color, thickness }, index) => {
+                if (index === 0) {
+                    drawnCanvasCtx.beginPath();
+                    drawnCanvasCtx.moveTo(x, y);
+                } else {
+                    drawnCanvasCtx.lineTo(x, y);
+                }
+                drawnCanvasCtx.strokeStyle = color;
+                drawnCanvasCtx.lineWidth = thickness;
+                drawnCanvasCtx.stroke();
+            });
+        }
+    }, [drawnData, drawnCanvasRef]);
 
     return (
         <div className="App">
@@ -65,6 +87,11 @@ function DrawingApp() {
                 onMouseMove={draw}
                 onMouseUp={endDrawing}
                 onMouseLeave={endDrawing}
+            />
+            <canvas style={{ position: 'absolute', top: 100, left: 400, zIndex: 1 }}
+                ref={(ref) => setDrawnCanvasRef(ref)}
+                width={800}
+                height={600}
             />
             <h1>awdioawd</h1>
             <h1>awdioawd</h1>
