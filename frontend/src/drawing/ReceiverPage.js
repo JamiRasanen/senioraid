@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-function DrawingApp() {
+function ReceiverDrawingApp() {
     const canvasRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [ctx, setCtx] = useState(null);
@@ -35,29 +35,6 @@ function DrawingApp() {
         //sendData();
     };
 
-    const sendData = async () => {
-
-        try {
-            const response = await fetch('http://localhost:4000/data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(drawnData)
-            });
-
-            if (response.ok) {
-                console.log('Data sent successfully');
-                // Handle success
-            } else {
-                console.error('Failed to send data');
-                // Handle error
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            // Handle error
-        }
-    };
 
     const fetchData = async () => {
 
@@ -101,9 +78,7 @@ function DrawingApp() {
         ctx.lineWidth = width;
     };
 
-    useEffect(() => {
-        sendData();
-    }, [drawnData])
+
 
     // useEffect(() => {
     //     if (drawnCanvasRef) {
@@ -158,41 +133,23 @@ function DrawingApp() {
 
     return (
         <div className="App">
-            <div className="toolbar">
-                <button onClick={clearCanvas}>Clear</button>
-                <input type="color" onChange={(e) => changeColor(e.target.value)} />
-                <input
-                    type="range"
-                    min="1"
-                    max="10"
-                    defaultValue="2"
-                    onChange={(e) => changeLineWidth(e.target.value)}
-                />
-            </div>
+            
             <canvas style={{ position: 'absolute', top: 100, left: 0, zIndex: 1 }}
                 ref={canvasRef}
-                width={800}
-                height={600}
+                width={1}
+                height={1}
                 onMouseDown={startDrawing}
                 onMouseMove={draw}
                 onMouseUp={endDrawing}
                 onMouseLeave={endDrawing}
             />
-            <canvas style={{ position: 'absolute', top: 100, left: 400, zIndex: 1 }}
+            <canvas style={{ position: 'absolute', top: 100, left: 0, zIndex: 1 }}
                 ref={(ref) => setDrawnCanvasRef(ref)}
                 width={800}
                 height={600}
             />
-            <h1>awdioawd</h1>
-            <h1>awdioawd</h1>
-            <h1>awdioawd</h1>
-            <h1>awdioawd</h1>
-            <h1>awdioawd</h1>
-            <h1>awdioawd</h1>
-            <h1>awdioawd</h1>
-            <h1>awdioawd</h1>
         </div>
     );
 }
 
-export {DrawingApp};
+export { ReceiverDrawingApp };
