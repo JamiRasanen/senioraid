@@ -57,7 +57,7 @@ function DrawingApp() {
                     onChange={(e) => changeLineWidth(e.target.value)}
                 />
             </div>
-            <canvas
+            <canvas style={{ position: 'absolute', top: 100, left: 0, zIndex: 1 }}
                 ref={canvasRef}
                 width={800}
                 height={600}
@@ -66,6 +66,14 @@ function DrawingApp() {
                 onMouseUp={endDrawing}
                 onMouseLeave={endDrawing}
             />
+            <h1>awdioawd</h1>
+            <h1>awdioawd</h1>
+            <h1>awdioawd</h1>
+            <h1>awdioawd</h1>
+            <h1>awdioawd</h1>
+            <h1>awdioawd</h1>
+            <h1>awdioawd</h1>
+            <h1>awdioawd</h1>
         </div>
     );
 }
