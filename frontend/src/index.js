@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import VideoCall from './videoCall';
 import reportWebVitals from './reportWebVitals';
-import DrawingApp from './drawing';
+import { DrawingApp } from './drawing/drawing';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

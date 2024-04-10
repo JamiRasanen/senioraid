@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import './App.css';
 
 function DrawingApp() {
     const canvasRef = useRef(null);
@@ -7,21 +6,22 @@ function DrawingApp() {
     const [ctx, setCtx] = useState(null);
     const [drawnData, setDrawnData] = useState([]);
     const [drawnCanvasRef, setDrawnCanvasRef] = useState(null);
+    const [currentColor, setCurrentColor] = useState('#000000');
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-        context.strokeStyle = '#000000'; // initial color
+        context.strokeStyle = currentColor; // initial color
         context.lineWidth = 2; // initial line width
         setCtx(context);
-    }, []);
+    }, [currentColor]);
 
     const startDrawing = (event) => {
         setIsDrawing(true);
         const { offsetX, offsetY } = event.nativeEvent;
         ctx.beginPath();
         ctx.moveTo(offsetX, offsetY);
-        setDrawnData([...drawnData, { x: offsetX, y: offsetY, color: ctx.strokeStyle, thickness: ctx.lineWidth }]);
+        setDrawnData([...drawnData, { x: offsetX, y: offsetY, color: currentColor, thickness: ctx.lineWidth }]);
     };
 
     const draw = (event) => {
@@ -29,7 +29,7 @@ function DrawingApp() {
         const { offsetX, offsetY } = event.nativeEvent;
         ctx.lineTo(offsetX, offsetY);
         ctx.stroke();
-        setDrawnData([...drawnData, { x: offsetX, y: offsetY, color: ctx.strokeStyle, thickness: ctx.lineWidth }]);
+        setDrawnData([...drawnData, { x: offsetX, y: offsetY, color: currentColor, thickness: ctx.lineWidth }]);
     };
 
     const endDrawing = () => {
@@ -42,7 +42,7 @@ function DrawingApp() {
     };
 
     const changeColor = (color) => {
-        ctx.strokeStyle = color;
+        setCurrentColor(color);
     };
 
     const changeLineWidth = (width) => {
@@ -64,12 +64,9 @@ function DrawingApp() {
                     drawnCanvasCtx.lineWidth = thickness;
                     drawnCanvasCtx.stroke();
                 });
-            }
-            else {
-                console.log("clear kutsuttu");
+            } else {
                 drawnCanvasCtx.clearRect(0, 0, drawnCanvasRef.width, drawnCanvasRef.height);
             }
-            
         }
     }, [drawnData, drawnCanvasRef]);
 
@@ -112,4 +109,4 @@ function DrawingApp() {
     );
 }
 
-export default DrawingApp;
+export {DrawingApp};
